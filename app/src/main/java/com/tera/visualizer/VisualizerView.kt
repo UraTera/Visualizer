@@ -76,7 +76,7 @@ class VisualizerView(
 
 
     init {
-        context.withStyledAttributes(attrs,  R.styleable.VisualizerView) {
+        context.withStyledAttributes(attrs, R.styleable.VisualizerView) {
 
             mAxisColor = getColor(R.styleable.VisualizerView_vs_axisColor, AXIS_COLOR)
             mColumns = getInt(R.styleable.VisualizerView_vs_columnsNum, COLUMNS)
@@ -257,7 +257,7 @@ class VisualizerView(
             val d = sqrt((real * real + imag * imag).toFloat())
             mData[i] = (d * 0.7f * mVolume).toInt().toByte()
         }
-        postInvalidate()
+        invalidate()
     }
 
     var volume: Float = 1f

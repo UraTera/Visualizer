@@ -257,7 +257,7 @@ class VisualizerView(
             val d = sqrt((real * real + imag * imag).toFloat())
             mData[i] = (d * 0.7f * mVolume).toInt().toByte()
         }
-        postInvalidate()
+        invalidate()
     }
 
     var volume: Float = 1f
