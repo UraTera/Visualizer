@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="VisualizerView">
+
+        <attr name="vs_axisColor" format="color" />
+        <attr name="vs_barColor" format="color" />
+        <attr name="vs_columnsNum" format="integer" />
+        <attr name="vs_groundColor" format="color" />
+        <attr name="vs_segmentHeight" format="dimension" />
+        <attr name="vs_segmentSpace" format="dimension" />
+        <attr name="vs_topColor" format="color" />
+
+        <attr name="vs_styleColumn" format="enum">
+            <enum name="wave" value="0"/>
+            <enum name="solid" value="1"/>
+            <enum name="segment" value="2"/>
+
+        </attr>
+
+    </declare-styleable>
+
+</resources>
