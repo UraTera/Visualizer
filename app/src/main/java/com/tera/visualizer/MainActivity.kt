@@ -18,8 +18,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.tera.visualizer.databinding.ActivityMainBinding
 import kotlin.math.atan
-import kotlin.math.exp
-import kotlin.math.ln
 import kotlin.math.sin
 
 
@@ -27,8 +25,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val VALUE_FREQ = "value_freq"
-        const val POS_FREQ = "pos_freq"
-        const val INDEX_SIZE = "index_size"
         const val STYLE = "style"
         const val MIN = 200f
         const val MAX = 5000f
@@ -39,7 +35,6 @@ class MainActivity : AppCompatActivity() {
     private var player: MediaPlayer? = null
     private lateinit var audioManager: AudioManager
     private var visualizer: VisualizerManager? = null
-
     private var track: AudioTrack? = null
     private val sampleRate: Int = 44100
     private var buffLength = 0
@@ -50,9 +45,7 @@ class MainActivity : AppCompatActivity() {
     private var currVolume = 0
     private var posVolume = 0f
     private var isGenerator = false
-    private var valueFreq = 0
-    private var posFreq = 0f
-    private var indexSize = 0
+    private var valueFreq = 0f
     private var style = 0
 
     private lateinit var sp: SharedPreferences
@@ -70,9 +63,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         sp = getSharedPreferences("settings", MODE_PRIVATE)
-        valueFreq = sp.getInt(VALUE_FREQ, MIN.toInt())
-        posFreq = sp.getFloat(POS_FREQ, MIN)
-        indexSize = sp.getInt(INDEX_SIZE, 0)
+        valueFreq = sp.getFloat(VALUE_FREQ, MIN)
         style = sp.getInt(STYLE, 0)
 
         initButton()
@@ -204,7 +195,6 @@ class MainActivity : AppCompatActivity() {
 
     // Громкость, Частота
     private fun initVolume() = with(binding) {
-        // Получить аудио менеджер
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         // Установите максимальную громкость
         maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
@@ -223,32 +213,20 @@ class MainActivity : AppCompatActivity() {
             setParams()
         }
 
+        // Частота
         slFreq.valueMin = MIN
         slFreq.valueMax = MAX
 
         slFreq.setOnChangeListener {
-            posFreq = it
-            valueFreq = logSlider(it).toInt()
-
-            val text = valueFreq.toString()
-            tvFreq.text = text
+            valueFreq = it
+            val str = valueFreq.toInt().toString()
+            tvFreq.text = str
 
             runOnUiThread {
-                frequency = valueFreq
+                frequency = valueFreq.toInt()
             }
         }
 
-    }
-
-    // Лоеарифмическая шкала
-    private fun logSlider(pos: Float): Float {
-        val min = MIN
-        val max = MAX
-        val minV = ln(min.toDouble())
-        val maxV = ln(max.toDouble())
-
-        val scale = (maxV - minV) / (max - min)
-        return exp(minV + scale * (pos - min)).toFloat()
     }
 
     private fun setParams() = with(binding) {
@@ -256,10 +234,10 @@ class MainActivity : AppCompatActivity() {
         val volume = percent.toInt().toString() + " %"
         tvVolume.text = volume
 
-        slFreq.value = posFreq
-        val str = valueFreq.toString()
+        slFreq.value = valueFreq
+        val str = valueFreq.toInt().toString()
         tvFreq.text = str
-        frequency = valueFreq
+        frequency = valueFreq.toInt()
         visualizer!!.style = style
 
         when (style) {
@@ -273,9 +251,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         sp.edit {
-            putInt(VALUE_FREQ, valueFreq)
-            putFloat(POS_FREQ, posFreq)
-            putInt(INDEX_SIZE, indexSize)
+            putFloat(VALUE_FREQ, valueFreq)
             putInt(STYLE, style)
         }
     }
@@ -284,7 +260,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         player?.release()
         visualizer?.release()
-        track?.stop()
         track?.release()
     }
 }

@@ -20,7 +20,11 @@ class VisualizerManager {
         visualizer!!.setDataCaptureListener(object : OnDataCaptureListener {
 
             // Обрабатываем частотный спектр
-            override fun onFftDataCapture(visualizer: Visualizer?, fft: ByteArray?, samplingRate: Int) {
+            override fun onFftDataCapture(
+                visualizer: Visualizer?,
+                fft: ByteArray?,
+                samplingRate: Int
+            ) {
 
                 mView!!.setFft(fft)
             }

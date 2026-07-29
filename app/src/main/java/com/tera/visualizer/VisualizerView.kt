@@ -272,7 +272,6 @@ class VisualizerView(
             if (value < 0) mStyle = 0
             setParams()
             invalidate()
-
         }
 
     var barColor: Int = 0
